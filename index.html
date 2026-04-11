@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Number Operations</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        /* Dark mode */
+        body.dark {
+            background: linear-gradient(135deg, #1e1e2f, #121212);
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Toggle */
+        .toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .toggle i {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Title */
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Input & Select */
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Result Animation */
+        #res {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            min-height: 40px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        /* Show animation */
+        #res.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Toggle -->
+        <div class="toggle">
+            <i class="fa-solid fa-moon" onclick="toggleMode()"></i>
+        </div>
+
+        <h2>Number Operations</h2>
+
+        <input type="number" id="num" placeholder="Enter number">
+
+        <select id="choice">
+            <option value="1">🧮 Factorial</option>
+            <option value="2">🔢 Fibonacci</option>
+            <option value="3">🔍 Prime Numbers</option>
+            <option value="4">🔁 Palindrome</option>
+        </select>
+
+        <button onclick="processNumber()">Submit</button>
+
+        <div id="res"></div>
+
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle("dark");
+        }
+
+        /* Logic */
+        function factorial(n) {
+            let fact = 1;
+            for (let i = 1; i <= n; i++) fact *= i;
+            return fact;
+        }
+
+        function fibonacci(n) {
+            let a = 0, b = 1, res = [];
+            for (let i = 0; i < n; i++) {
+                res.push(a);
+                [a, b] = [b, a + b];
+            }
+            return res.join(", ");
+        }
+
+        function palindrome(n) {
+            let str = n.toString();
+            return str === str.split("").reverse().join("");
+        }
+
+        function prime(n) {
+            let res = [];
+            for (let i = 2; i <= n; i++) {
+                let flag = true;
+                for (let j = 2; j < i; j++) {
+                    if (i % j === 0) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) res.push(i);
+            }
+            return res.join(", ");
+        }
+
+        /* Animated output */
+        function showResult(text) {
+            let res = document.getElementById("res");
+            res.classList.remove("show");
+
+            setTimeout(() => {
+                res.innerText = text;
+                res.classList.add("show");
+            }, 150);
+        }
+
+        function processNumber() {
+            let n = document.getElementById("num").value;
+            let ch = document.getElementById("choice").value;
+
+            if (n === "" || n < 0) {
+                showResult("❌ Enter a valid number");
+                return;
+            }
+
+            switch (ch) {
+                case "1":
+                    showResult("🧮 Factorial: " + factorial(n));
+                    break;
+                case "2":
+                    showResult("🔢 Fibonacci: " + fibonacci(n));
+                    break;
+                case "3":
+                    showResult("🔍 Primes: " + prime(n));
+                    break;
+                case "4":
+                    showResult(palindrome(n)
+                        ? "✅ Palindrome"
+                        : "❌ Not a Palindrome");
+                    break;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
